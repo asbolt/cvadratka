@@ -31,27 +31,26 @@ const double EPS = 1e-5;
 const int COEFF_ARRAY_SIZE = 3;
 
 
-struct Coefficient // TODO default values
+struct Coefficient
 {
-    double value;
-    char letter;
+    double value = NAN;
+    char letter = 'ў';
 };
-
 
 struct Roots
 {
-    double x1; 
-    double x2;
-    int nRoots; 
+    double x1 = NAN; 
+    double x2 = NAN;
+    int nRoots = NULL; 
 };
 
 struct Tests
 {
-    int number;
-    Coefficient coefficient[3];
-    double x1Expected; 
-    double x2Expected;  
-    int nRootsExpected; 
+    int number = -1;
+    Coefficient coefficient[3] = {{NAN, 'ў'}, {NAN, 'ў'}, {NAN, 'ў'}};
+    double x1Expected = NAN; 
+    double x2Expected = NAN;  
+    int nRootsExpected = NULL; 
 };
 
 const Tests TESTS [] = 
@@ -64,6 +63,7 @@ const Tests TESTS [] =
     {5, {{0}, {0}, {0}}, NAN, NAN, -2}, // INF
 };
 
+// TODO тест с дробными значениями
 // TODO TESTS_COUNT constant
 
 int compareToZero (double coefficient);
@@ -90,11 +90,10 @@ int main ()
     printRoots (coefficient, &roots);
 
     for (int i = 0; i < 5; i++)
-    test (TESTS [i]); // TODO tab
+        test (TESTS [i]);
 
     return 0;
 }
-
 
 int compareToZero (double coefficient) 
 {
@@ -198,7 +197,7 @@ int solveQuadratic (Coefficient coefficient [], struct Roots *roots)
 {
     double D = coefficient[1].value*coefficient[1].value - 4*coefficient[0].value*coefficient[2].value;
 
-    if (compareToZero(D) == LESS) // isnan, isinf, isfinite
+    if (compareToZero(D) == LESS)
     {
         (*roots).x1 = NAN; 
         (*roots).x2 = NAN;
@@ -239,8 +238,8 @@ int printTestResults(Roots roots, Tests tests)
 {
     
     printf ("Error Test %d: a = %lg, b = %lg, c = %lg, x1 = %lg, x2 = %lg, nRoots = %d \nExpected: x1 = %lg, x2 = %lg, \
-             nRoots = %d\n", tests.number, tests.coefficient[0].value, tests.coefficient[1].value, tests.coefficient[2].value, roots.x1, roots.x2, roots.nRoots,
-             tests.x1Expected, tests.x2Expected, tests.nRootsExpected); // TODO keep size of line below 128 symbols
+             nRoots = %d\n", tests.number, tests.coefficient[0].value, tests.coefficient[1].value, tests.coefficient[2].value,
+             roots.x1, roots.x2, roots.nRoots, tests.x1Expected, tests.x2Expected, tests.nRootsExpected);
     return SUCCESS;
 }
 
@@ -255,35 +254,32 @@ int checkTestResults(Roots roots, Tests tests)
                 printTestResults(roots, tests);
             }
             return SUCCESS;
-            break; // TODO break is unused
 
         case 1: // TODO merge similar 
             // TODO check isnan and isinf
             // TODO write function to check if xn is equal to xnExpected
-            if (roots.nRoots != tests.nRootsExpected || compareToZero(roots.x1 - tests.x1Expected) == MORE) // TODO EQUALS
+            if (roots.nRoots != tests.nRootsExpected || compareToZero(roots.x1 - tests.x1Expected) == EQUAL)
             {
                 printTestResults(roots, tests);
             }
             return SUCCESS;
-            break;
 
         case 2:
-            if (roots.nRoots != tests.nRootsExpected || compareToZero(roots.x1 - tests.x1Expected) == MORE 
-            || compareToZero(roots.x2 - tests.x2Expected) == MORE) // TODO tab
+            if (roots.nRoots != tests.nRootsExpected || compareToZero(roots.x1 - tests.x1Expected) == EQUAL 
+                || compareToZero(roots.x2 - tests.x2Expected) == EQUAL)
             {
                 printTestResults(roots, tests);
             }
             return SUCCESS;
-            break;
 
         case -1:
-            if (roots.nRoots != tests.nRootsExpected || compareToZero(roots.x1 - tests.x1Expected) == MORE 
-            || compareToZero(roots.x2 - tests.x2Expected) == MORE)
+            if (roots.nRoots != tests.nRootsExpected || compareToZero(roots.x1 - tests.x1Expected) == EQUAL 
+                || compareToZero(roots.x2 - tests.x2Expected) == EQUAL)
             {
                 printTestResults(roots, tests);
             }
             return SUCCESS;
-            break;
+
 
         default: 
             return ERROR;
