@@ -1,4 +1,4 @@
-#include <scan.h>
+#include "scan.h"
 
 int scanNumber (Coefficient *coefficient)
 {
