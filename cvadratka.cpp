@@ -269,11 +269,9 @@ int printGoodTestResults(Roots roots, Test test)
 
 int checkTestResults(Roots roots, Test test)
 {
-   switch (solve (test.coefficient, &roots))
-    {
-        case INFINITY_ROOTS:
-        case NULL_ROOTS:
-            if (solve (test.coefficient, &roots) != test.nRootsExpected)
+   if (solve (test.coefficient, &roots) != test.nRootsExpected || (isnan (test.x1Expected) || isnan (roots.x1) ||
+    compareToZero(roots.x1 - test.x1Expected) != EQUAL) || (isnan (test.x1Expected) || isnan (roots.x1) || 
+    compareToZero(roots.x2 - test.x2Expected) != EQUAL))
             {
                 printBadTestResults(roots, test);
             }
@@ -282,37 +280,6 @@ int checkTestResults(Roots roots, Test test)
                 printGoodTestResults(roots, test);
             }
             return SUCCESS;
-
-        case ONE_ROOT:
-            // TODO check isnan and isinf
-            // TODO write function to check if xn is equal to xnExpected
-            if (solve (test.coefficient, &roots) != test.nRootsExpected || compareToZero(roots.x1 - test.x1Expected) != EQUAL)
-            {
-                printBadTestResults(roots, test);
-            }
-            else
-            {
-                printGoodTestResults(roots, test);
-            }
-            return SUCCESS;
-
-        case TWO_ROOTS:
-        case TWO_SAME_ROOTS:
-            if (solve (test.coefficient, &roots) != test.nRootsExpected || compareToZero(roots.x1 - test.x1Expected) != EQUAL 
-                || compareToZero(roots.x2 - test.x2Expected) != EQUAL)
-            {
-                printBadTestResults(roots, test);
-            }
-            else
-            {
-                printGoodTestResults(roots, test);
-            }
-            return SUCCESS;
-
-
-        default: 
-            return ERROR;
-    }
 }
 
 int test (Test test) 
