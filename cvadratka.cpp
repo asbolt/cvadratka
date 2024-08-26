@@ -34,20 +34,19 @@ const int COEFF_ARRAY_SIZE = 3;
 struct Coefficient
 {
     double value = NAN;
-    char letter = 'ў';
+    char letter = 'x';
 };
 
 struct Roots
 {
     double x1 = NAN; 
-    double x2 = NAN;
-    int nRoots = NULL; 
+    double x2 = NAN; 
 };
 
 struct Tests
 {
     int number = -1;
-    Coefficient coefficient[3] = {{NAN, 'ў'}, {NAN, 'ў'}, {NAN, 'ў'}};
+    Coefficient coefficient[3] = {{NAN, 'x'}, {NAN, 'x'}, {NAN, 'x'}};
     double x1Expected = NAN; 
     double x2Expected = NAN;  
     int nRootsExpected = NULL; 
@@ -55,16 +54,14 @@ struct Tests
 
 const Tests TESTS [] = 
 {
-    {0, {{1}, {2}, {-3}}, 1, -3, 2}, // d > 0
-    {1, {{2}, {4}, {2}}, 1, 1, -1}, // d = 0
-    {2, {{4}, {8}, {9}}, NAN, NAN, 0}, // d < 0
-    {3, {{0}, {4}, {-8}}, 2, NAN, 1}, // Linear
-    {4, {{0}, {0}, {56}}, NAN, NAN, 0}, // NULL
-    {5, {{0}, {0}, {0}}, NAN, NAN, -2}, // INF
+    {0, {{1}, {2}, {-3}}, 1, -3, TWO_ROOTS}, // d > 0
+    {1, {{2}, {4}, {2}}, 1, 1, TWO_SAME_ROOTS}, // d = 0
+    {2, {{4}, {8}, {9}}, NAN, NAN, NULL_ROOTS}, // d < 0
+    {3, {{0}, {4}, {-8}}, 2, NAN, ONE_ROOT}, // Linear
+    {4, {{0}, {0}, {56}}, NAN, NAN, NULL_ROOTS}, // NULL
+    {5, {{0}, {0}, {0}}, NAN, NAN, INFINITY_ROOTS}, // INF
+    {6, {{1.678}, {5.829}, {2.443}}, -0.818085, -5.010915, TWO_ROOTS}, // fractional numbers
 };
-
-// TODO тест с дробными значениями
-// TODO TESTS_COUNT constant
 
 int compareToZero (double coefficient);
 int scanNumber (Coefficient *coefficient);
@@ -80,7 +77,7 @@ int test (Tests test);
 int main ()
 {
     Coefficient coefficient [COEFF_ARRAY_SIZE] = { {NAN, 'a'}, {NAN, 'b'}, {NAN, 'c'} };
-    Roots roots = {NAN, NAN, NULL};
+    Roots roots = {NAN, NAN};
 
     if (enterNumbers(coefficient) != SUCCESS) 
     {
@@ -239,41 +236,34 @@ int printTestResults(Roots roots, Tests tests)
     
     printf ("Error Test %d: a = %lg, b = %lg, c = %lg, x1 = %lg, x2 = %lg, nRoots = %d \nExpected: x1 = %lg, x2 = %lg, \
              nRoots = %d\n", tests.number, tests.coefficient[0].value, tests.coefficient[1].value, tests.coefficient[2].value,
-             roots.x1, roots.x2, roots.nRoots, tests.x1Expected, tests.x2Expected, tests.nRootsExpected);
+             roots.x1, roots.x2, solve (tests.coefficient, &roots), tests.x1Expected, tests.x2Expected, tests.nRootsExpected);
     return SUCCESS;
 }
 
 int checkTestResults(Roots roots, Tests tests)
 {
-    switch (tests.nRootsExpected) // TODO use AmountRoots
+   switch (solve (tests.coefficient, &roots))
     {
-        case -2:
-        case 0:
-            if (roots.nRoots != tests.nRootsExpected)
+        case INFINITY_ROOTS:
+        case NULL_ROOTS:
+            if (solve (tests.coefficient, &roots) != tests.nRootsExpected)
             {
                 printTestResults(roots, tests);
             }
             return SUCCESS;
 
-        case 1: // TODO merge similar 
+        case ONE_ROOT:
             // TODO check isnan and isinf
             // TODO write function to check if xn is equal to xnExpected
-            if (roots.nRoots != tests.nRootsExpected || compareToZero(roots.x1 - tests.x1Expected) == EQUAL)
+            if (solve (tests.coefficient, &roots) != tests.nRootsExpected || compareToZero(roots.x1 - tests.x1Expected) == EQUAL)
             {
                 printTestResults(roots, tests);
             }
             return SUCCESS;
 
-        case 2:
-            if (roots.nRoots != tests.nRootsExpected || compareToZero(roots.x1 - tests.x1Expected) == EQUAL 
-                || compareToZero(roots.x2 - tests.x2Expected) == EQUAL)
-            {
-                printTestResults(roots, tests);
-            }
-            return SUCCESS;
-
-        case -1:
-            if (roots.nRoots != tests.nRootsExpected || compareToZero(roots.x1 - tests.x1Expected) == EQUAL 
+        case TWO_ROOTS:
+        case TWO_SAME_ROOTS:
+            if (solve (tests.coefficient, &roots) != tests.nRootsExpected || compareToZero(roots.x1 - tests.x1Expected) == EQUAL 
                 || compareToZero(roots.x2 - tests.x2Expected) == EQUAL)
             {
                 printTestResults(roots, tests);
@@ -291,9 +281,7 @@ int test (Tests tests)
     double x1 = NAN, x2 = NAN;
     int number = 0;
 
-    Roots roots = {x1, x2, NULL};
-
-    roots.nRoots = solve (tests.coefficient, &roots);
+    Roots roots = {x1, x2};
    
     checkTestResults(roots, tests);
     return SUCCESS;
