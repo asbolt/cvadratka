@@ -2,7 +2,6 @@
 
 int compareToZero (double coefficient) 
 {
-    assert(coefficient != NULL);
 
     if (coefficient > EPS) 
     {
@@ -20,8 +19,6 @@ int compareToZero (double coefficient)
 
 int printRoots (Coefficient coefficient [], Roots *roots) 
 {
-    assert(coefficient != NULL);
-    assert(roots != NULL);
 
     switch (solve (coefficient, roots)) 
     {
@@ -53,7 +50,6 @@ int printRoots (Coefficient coefficient [], Roots *roots)
 
 int solveLinear (Coefficient coefficient [], struct Roots *roots) 
 {
-    assert(coefficient != NULL);
 
     if (compareToZero (coefficient[1].value) == EQUAL) {
 
@@ -82,7 +78,6 @@ int solveLinear (Coefficient coefficient [], struct Roots *roots)
 
 int solveQuadratic (Coefficient coefficient [], struct Roots *roots)
 {
-    assert(coefficient != NULL);
 
     double D = coefficient[1].value*coefficient[1].value - 4*coefficient[0].value*coefficient[2].value;
 
@@ -112,7 +107,6 @@ int solveQuadratic (Coefficient coefficient [], struct Roots *roots)
 
 int solve (Coefficient coefficient [], Roots *roots)
 { 
-    assert(coefficient != NULL);
 
     if (compareToZero (coefficient[0].value) == EQUAL) 
     {

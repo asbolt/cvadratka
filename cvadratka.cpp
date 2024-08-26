@@ -1,5 +1,7 @@
 #include "scan.h"
 
+int chooseWay (Coefficient coefficient [], Roots roots);
+
 int main ()
 {
     Coefficient coefficient [COEFF_ARRAY_SIZE] = { {NAN, 'a'}, {NAN, 'b'}, {NAN, 'c'} };
@@ -24,7 +26,7 @@ int chooseWay (Coefficient coefficient [], Roots roots)
             for (int i = 0; i < testsAmount; i++)
             test (TESTS [i]);
 
-            return 0;
+            return SUCCESS;
         }
         else
         {
@@ -34,6 +36,7 @@ int chooseWay (Coefficient coefficient [], Roots roots)
             }
     
             printRoots (coefficient, &roots);
+            return SUCCESS;
         }
     }
     else 

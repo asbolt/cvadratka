@@ -36,7 +36,6 @@ int checkTestResults(Roots roots, Test test)
 int test (Test test) 
 {
     double x1 = NAN, x2 = NAN;
-    int number = 0;
 
     Roots roots = {x1, x2};
    

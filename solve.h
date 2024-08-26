@@ -6,14 +6,11 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#ifndef Roots
-    struct Roots
-    {
-        double x1 = NAN; 
-        double x2 = NAN; 
-    };
-#endif
-
+struct Roots
+{
+    double x1 = NAN; 
+    double x2 = NAN; 
+};
 
 enum AmountRoots 
 {

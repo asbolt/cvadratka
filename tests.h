@@ -3,13 +3,6 @@
 
 #include "solve.h"
 
-struct Roots
-{
-    double x1 = NAN; 
-    double x2 = NAN; 
-};
-
-
 struct Test
 {
     int number = -1;

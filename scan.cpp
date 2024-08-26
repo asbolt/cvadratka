@@ -2,7 +2,6 @@
 
 int scanNumber (Coefficient *coefficient)
 {
-    assert(coefficient != NULL);
 
     printf ("Введите %c:", (*coefficient).letter);
     if (scanf ("%lf", &(*coefficient).value) != 1) 
@@ -16,7 +15,6 @@ int scanNumber (Coefficient *coefficient)
 
 int enterNumbers (Coefficient coefficient [])
 {
-    assert(coefficient != NULL);
 
     for (int i = 0; i < COEFF_ARRAY_SIZE; i++) 
     {
