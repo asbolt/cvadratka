@@ -1,12 +1,14 @@
+#ifndef TESTS_H_
+#define TESTS_H_
+
 #include <solve.h>
 
-#ifndef Roots
-    struct Roots
-    {
-        double x1 = NAN; 
-        double x2 = NAN; 
-    };
-#endif
+struct Roots
+{
+    double x1 = NAN; 
+    double x2 = NAN; 
+};
+
 
 struct Test
 {
@@ -34,3 +36,5 @@ int printBadTestResults(Roots roots, Test test);
 int printGoodTestResults(Roots roots, Test test);
 int checkTestResults(Roots roots, Test test);
 int test (Test test);
+
+#endif

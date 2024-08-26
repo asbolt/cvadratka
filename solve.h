@@ -1,3 +1,6 @@
+#ifndef SOLVE_H_
+#define SOLVE_H_
+
 #include <stdio.h>
 #include <math.h>
 #include <assert.h>
@@ -48,3 +51,5 @@ int solveLinear (Coefficient coefficient [], Roots *roots);
 int solveQuadratic (Coefficient coefficient [], Roots *roots);
 int solve (Coefficient coefficient [], Roots *roots);
 int compareToZero (double coefficient);
+
+#endif
