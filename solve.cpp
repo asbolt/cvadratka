@@ -19,37 +19,55 @@ int compareToZero (double coefficient)
 
 int printRoots (Coefficient coefficient [], Roots *roots) 
 {
+    assert (!isnan (coefficient[0].value));
+    assert (!isnan (coefficient[1].value));
+    assert (!isnan (coefficient[2].value));
 
     switch (solve (coefficient, roots)) 
     {
         case INFINITY_ROOTS: 
-            printf ("Бесконечное количество корней\n");
-            break;
 
-        case NULL_ROOTS: 
+            printf ("Бесконечное количество корней\n");
+            return SUCCESS;
+
+        case NULL_ROOTS:
+
             printf ("Нет корней\n");
-            break;
+            return SUCCESS;
 
         case ONE_ROOT: 
+
+            assert (!isnan((*roots).x1));
+
             printf ("Один корень \nx1 = %lf\n", (*roots).x1);
-            break;
+            return SUCCESS;
         
         case TWO_ROOTS: 
-            printf ("Два корня \nx1 = %lf, x2 = %lf\n", (*roots).x1, (*roots).x2);
-            break;
 
-        case TWO_SAME_ROOTS: 
+            assert (!isnan((*roots).x1));
+            assert (!isnan((*roots).x2));
+
+            printf ("Два корня \nx1 = %lf, x2 = %lf\n", (*roots).x1, (*roots).x2);
+            return SUCCESS;
+
+        case TWO_SAME_ROOTS:
+
+            assert (!isnan((*roots).x1));
+            assert (!isnan((*roots).x2));
+
             printf ("Два одинаковых корня \nx1 = x2 = %lf\n", (*roots).x1);
-            break;
+            return SUCCESS;
 
         default: 
             return ERROR;
     }
-    return SUCCESS;
 }
 
 int solveLinear (Coefficient coefficient [], struct Roots *roots) 
 {
+    assert (!isnan (coefficient[0].value));
+    assert (!isnan (coefficient[1].value));
+    assert (!isnan (coefficient[2].value));
 
     if (compareToZero (coefficient[1].value) == EQUAL) {
 
@@ -78,6 +96,9 @@ int solveLinear (Coefficient coefficient [], struct Roots *roots)
 
 int solveQuadratic (Coefficient coefficient [], struct Roots *roots)
 {
+    assert (!isnan (coefficient[0].value));
+    assert (!isnan (coefficient[1].value));
+    assert (!isnan (coefficient[2].value));
 
     double D = coefficient[1].value*coefficient[1].value - 4*coefficient[0].value*coefficient[2].value;
 
@@ -107,6 +128,9 @@ int solveQuadratic (Coefficient coefficient [], struct Roots *roots)
 
 int solve (Coefficient coefficient [], Roots *roots)
 { 
+    assert (!isnan (coefficient[0].value));
+    assert (!isnan (coefficient[1].value));
+    assert (!isnan (coefficient[2].value));
 
     if (compareToZero (coefficient[0].value) == EQUAL) 
     {
