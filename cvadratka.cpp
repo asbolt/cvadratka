@@ -55,7 +55,7 @@ struct Tests
 const Tests TESTS [] = 
 {
     {0, {{1}, {2}, {-3}}, 1, -3, TWO_ROOTS}, // d > 0
-    {1, {{2}, {4}, {2}}, 1, 1, TWO_SAME_ROOTS}, // d = 0
+    {1, {{2}, {4}, {2}}, -1, -1, TWO_SAME_ROOTS}, // d = 0
     {2, {{4}, {8}, {9}}, NAN, NAN, NULL_ROOTS}, // d < 0
     {3, {{0}, {4}, {-8}}, 2, NAN, ONE_ROOT}, // Linear
     {4, {{0}, {0}, {56}}, NAN, NAN, NULL_ROOTS}, // NULL
@@ -255,7 +255,7 @@ int checkTestResults(Roots roots, Tests tests)
         case ONE_ROOT:
             // TODO check isnan and isinf
             // TODO write function to check if xn is equal to xnExpected
-            if (solve (tests.coefficient, &roots) != tests.nRootsExpected || compareToZero(roots.x1 - tests.x1Expected) == EQUAL)
+            if (solve (tests.coefficient, &roots) != tests.nRootsExpected || compareToZero(roots.x1 - tests.x1Expected) != EQUAL)
             {
                 printTestResults(roots, tests);
             }
@@ -263,8 +263,8 @@ int checkTestResults(Roots roots, Tests tests)
 
         case TWO_ROOTS:
         case TWO_SAME_ROOTS:
-            if (solve (tests.coefficient, &roots) != tests.nRootsExpected || compareToZero(roots.x1 - tests.x1Expected) == EQUAL 
-                || compareToZero(roots.x2 - tests.x2Expected) == EQUAL)
+            if (solve (tests.coefficient, &roots) != tests.nRootsExpected || compareToZero(roots.x1 - tests.x1Expected) != EQUAL 
+                || compareToZero(roots.x2 - tests.x2Expected) != EQUAL)
             {
                 printTestResults(roots, tests);
             }
