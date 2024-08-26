@@ -60,19 +60,20 @@ const Test TESTS [] =
     {6, {{1.678}, {5.829}, {2.443}}, -0.487536,  -2.98624, TWO_ROOTS}, // fractional numbers
 };
 
-const int testsAmount = sizeof(TESTS)/sizeof(TESTS[0]);
+const int testsAmount = sizeof(TESTS) / sizeof(TESTS[0]);
 
 int compareToZero (double coefficient);
 int scanNumber (Coefficient *coefficient);
 int enterNumbers (Coefficient coefficient []);
 int printRoots (Coefficient coefficient [], Roots *roots);
-int solveLinear (Coefficient coefficient [], struct Roots *roots);
-int solveQuadratic (Coefficient coefficient [], struct Roots *roots);
-int solve (Coefficient coefficient [], struct Roots *roots);
-int printBadTestResults(struct AllValues);
+int solveLinear (Coefficient coefficient [], Roots *roots);
+int solveQuadratic (Coefficient coefficient [], Roots *roots);
+int solve (Coefficient coefficient [], Roots *roots);
+int printBadTestResults(Roots roots, Test test);
 int printGoodTestResults(Roots roots, Test test);
-int checkTestResults(struct AllValues);
+int checkTestResults(Roots roots, Test test);
 int test (Test test);
+int chooseWay (Coefficient coefficient [], Roots roots);
 
 int main ()
 {
@@ -82,7 +83,15 @@ int main ()
     printf ("Введите \"t\", если хотите запустить тесты, \n");
     printf ("или введите \"s\", если хотите ввести коэффициенты вручную.\n");
 
+    chooseWay (coefficient, roots);
+}
+
+int chooseWay (Coefficient coefficient [], Roots roots)
+{
+    assert(coefficient != NULL);
+
     char letter = 'x';
+
     if (scanf ("%c", &letter) == 1 && (letter == 't' || letter == 'T' || letter == 's' || letter == 'S'))
     {
         if (letter == 't' || letter == 'T')
@@ -112,6 +121,8 @@ int main ()
 
 int compareToZero (double coefficient) 
 {
+    assert(coefficient != NULL);
+
     if (coefficient > EPS) 
     {
         return MORE;
@@ -128,6 +139,8 @@ int compareToZero (double coefficient)
 
 int scanNumber (Coefficient *coefficient)
 {
+    assert(coefficient != NULL);
+
     printf ("Введите %c:", (*coefficient).letter);
     if (scanf ("%lf", &(*coefficient).value) != 1) 
     {
@@ -140,6 +153,8 @@ int scanNumber (Coefficient *coefficient)
 
 int enterNumbers (Coefficient coefficient [])
 {
+    assert(coefficient != NULL);
+
     for (int i = 0; i < COEFF_ARRAY_SIZE; i++) 
     {
        if (scanNumber (&coefficient[i]) != SUCCESS) 
@@ -153,6 +168,9 @@ int enterNumbers (Coefficient coefficient [])
 
 int printRoots (Coefficient coefficient [], Roots *roots) 
 {
+    assert(coefficient != NULL);
+    assert(roots != NULL);
+
     switch (solve (coefficient, roots)) 
     {
         case INFINITY_ROOTS: 
@@ -183,6 +201,8 @@ int printRoots (Coefficient coefficient [], Roots *roots)
 
 int solveLinear (Coefficient coefficient [], struct Roots *roots) 
 {
+    assert(coefficient != NULL);
+
     if (compareToZero (coefficient[1].value) == EQUAL) {
 
         if (compareToZero (coefficient[2].value) == EQUAL) {
@@ -210,6 +230,8 @@ int solveLinear (Coefficient coefficient [], struct Roots *roots)
 
 int solveQuadratic (Coefficient coefficient [], struct Roots *roots)
 {
+    assert(coefficient != NULL);
+
     double D = coefficient[1].value*coefficient[1].value - 4*coefficient[0].value*coefficient[2].value;
 
     if (compareToZero(D) == LESS)
@@ -238,22 +260,24 @@ int solveQuadratic (Coefficient coefficient [], struct Roots *roots)
 
 int solve (Coefficient coefficient [], Roots *roots)
 { 
-   if (compareToZero (coefficient[0].value) == EQUAL) 
-   {
+    assert(coefficient != NULL);
+
+    if (compareToZero (coefficient[0].value) == EQUAL) 
+    {
         return solveLinear (coefficient, roots);
 
-   } 
-   else 
-   {
+    } 
+    else 
+    {
         return solveQuadratic (coefficient, roots);
-   } 
+    } 
 }
 
 int printBadTestResults(Roots roots, Test test) 
 {
     
-    printf ("Error Test %d: a = %lg, b = %lg, c = %lg, x1 = %lg, x2 = %lg, nRoots = %d \nExpected: x1 = %lg, x2 = %lg, \
-             nRoots = %d\n", test.number, test.coefficient[0].value, test.coefficient[1].value, test.coefficient[2].value,
+    printf ("Error Test %d: a = %lg, b = %lg, c = %lg, x1 = %lg, x2 = %lg, nRoots = %d \nExpected: x1 = %lg, x2 = %lg,"
+            "nRoots = %d\n", test.number, test.coefficient[0].value, test.coefficient[1].value, test.coefficient[2].value,
              roots.x1, roots.x2, solve (test.coefficient, &roots), test.x1Expected, test.x2Expected, test.nRootsExpected);
     return SUCCESS;
 }
@@ -268,17 +292,18 @@ int printGoodTestResults(Roots roots, Test test)
 
 int checkTestResults(Roots roots, Test test)
 {
-   if (solve (test.coefficient, &roots) != test.nRootsExpected || (isnan (test.x1Expected) || isnan (roots.x1) ||
-    compareToZero(roots.x1 - test.x1Expected) != EQUAL) || (isnan (test.x1Expected) || isnan (roots.x1) || 
-    compareToZero(roots.x2 - test.x2Expected) != EQUAL))
-            {
-                printBadTestResults(roots, test);
-            }
-            else
-            {
-                printGoodTestResults(roots, test);
-            }
-            return SUCCESS;
+    if (solve (test.coefficient, &roots) != test.nRootsExpected || (isnan (test.x1Expected) || isnan (roots.x1) ||
+        compareToZero(roots.x1 - test.x1Expected) != EQUAL) || (isnan (test.x1Expected) || isnan (roots.x1) || 
+        compareToZero(roots.x2 - test.x2Expected) != EQUAL))
+    {
+        printBadTestResults(roots, test);
+    }
+    else
+    {
+        printGoodTestResults(roots, test);
+    }
+
+    return SUCCESS;
 }
 
 int test (Test test) 
