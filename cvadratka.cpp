@@ -1,4 +1,5 @@
 #include "scan.h"
+#include "tests.h"
 
 int chooseWay (Coefficient coefficient [], Roots roots);
 
