@@ -15,22 +15,22 @@ struct Roots
 enum AmountRoots 
 {
     INFINITY_ROOTS = -2, 
-    NULL_ROOTS = 0, 
-    ONE_ROOT = 1, 
-    TWO_ROOTS = 2, 
+    NULL_ROOTS     = 0, 
+    ONE_ROOT       = 1, 
+    TWO_ROOTS      = 2, 
     TWO_SAME_ROOTS = -1
 };
 
 enum Status 
 {
     SUCCESS = 0, 
-    ERROR = 1
+    ERROR   = 1
 };
 
 enum Compare 
 {
-    MORE = 1, 
-    LESS = -1, 
+    MORE  = 1, 
+    LESS  = -1, 
     EQUAL = 0
 };
 

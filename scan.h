@@ -5,5 +5,6 @@
 
 int scanNumber (Coefficient *coefficient);
 int enterNumbers (Coefficient coefficient []);
+int finishRead ();
 
 #endif

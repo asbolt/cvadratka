@@ -2,7 +2,6 @@
 
 int compareToZero (double coefficient) 
 {
-
     if (coefficient > EPS) 
     {
         return MORE;
@@ -19,9 +18,8 @@ int compareToZero (double coefficient)
 
 int printRoots (Coefficient coefficient [], Roots *roots) 
 {
-    assert (!isnan (coefficient[0].value));
-    assert (!isnan (coefficient[1].value));
-    assert (!isnan (coefficient[2].value));
+    assert (coefficient);
+    assert (roots);
 
     switch (solve (coefficient, roots)) 
     {
@@ -65,9 +63,8 @@ int printRoots (Coefficient coefficient [], Roots *roots)
 
 int solveLinear (Coefficient coefficient [], struct Roots *roots) 
 {
-    assert (!isnan (coefficient[0].value));
-    assert (!isnan (coefficient[1].value));
-    assert (!isnan (coefficient[2].value));
+    assert (coefficient);
+    assert (roots);
 
     if (compareToZero (coefficient[1].value) == EQUAL) {
 
@@ -96,9 +93,8 @@ int solveLinear (Coefficient coefficient [], struct Roots *roots)
 
 int solveQuadratic (Coefficient coefficient [], struct Roots *roots)
 {
-    assert (!isnan (coefficient[0].value));
-    assert (!isnan (coefficient[1].value));
-    assert (!isnan (coefficient[2].value));
+    assert (coefficient);
+    assert (roots);
 
     double D = coefficient[1].value*coefficient[1].value - 4*coefficient[0].value*coefficient[2].value;
 
@@ -111,16 +107,15 @@ int solveQuadratic (Coefficient coefficient [], struct Roots *roots)
     } 
     else if (compareToZero(D) == EQUAL) 
     {
-        (*roots).x1 = -coefficient[1].value/(2*coefficient[0].value);
-        (*roots).x2 = -coefficient[1].value/(2*coefficient[0].value);
+        (*roots).x1 = (*roots).x2 = -coefficient[1].value/(2*coefficient[0].value);
 
         return TWO_SAME_ROOTS;
     }
     else
     {
-        double d = sqrt(D);
-        (*roots).x1 = (-coefficient[1].value + d)/(2*coefficient[0].value);
-        (*roots).x2 = (-coefficient[1].value - d)/(2*coefficient[0].value);
+        double sqrtD = sqrt(D);
+        (*roots).x1 = (-coefficient[1].value + sqrtD)/(2*coefficient[0].value);
+        (*roots).x2 = (-coefficient[1].value - sqrtD)/(2*coefficient[0].value);
 
         return TWO_ROOTS;
     }
@@ -128,9 +123,8 @@ int solveQuadratic (Coefficient coefficient [], struct Roots *roots)
 
 int solve (Coefficient coefficient [], Roots *roots)
 { 
-    assert (!isnan (coefficient[0].value));
-    assert (!isnan (coefficient[1].value));
-    assert (!isnan (coefficient[2].value));
+    assert (coefficient);
+    assert (roots);
 
     if (compareToZero (coefficient[0].value) == EQUAL) 
     {

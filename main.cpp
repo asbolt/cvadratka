@@ -16,7 +16,7 @@ int main ()
 
 int chooseWay (Coefficient coefficient [], Roots roots)
 {
-    assert(coefficient != NULL);
+    assert (coefficient);
 
     char letter = 'x';
 
@@ -24,13 +24,20 @@ int chooseWay (Coefficient coefficient [], Roots roots)
     {
         if (letter == 't' || letter == 'T')
         {
+            int amountBadBoys = 0;
+
             for (int i = 0; i < testsAmount; i++)
-            test (TESTS [i]);
+            {
+                amountBadBoys += test (TESTS [i]);
+            }
+            
+            printf ("Количество успешных тестов: %d\n", testsAmount - amountBadBoys);
+            printf ("Количество проваленных тестов: %d\n", amountBadBoys);
 
             return SUCCESS;
         }
         else
-        {
+        {   
             if (enterNumbers(coefficient) != SUCCESS) 
             {
                 return ERROR;
@@ -42,7 +49,7 @@ int chooseWay (Coefficient coefficient [], Roots roots)
     }
     else 
     {
-        while (getchar () != '\n') {}
+        finishRead ();
         printf ("Ошибка ввода");
         return SUCCESS;
     }
